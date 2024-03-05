@@ -1,0 +1,1 @@
+/bin/c++ -rdynamic CMakeFiles/bls_c256_test.dir/test/bls_c256_test.cpp.o -o bin/bls_c256_test  -Wl,-rpath,/home/winay/go/src/github.com/zennittians/bls/lib lib/libbls_c256.so -lgmpxx -lmcl -lgmp 

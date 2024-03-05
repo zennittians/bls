@@ -1,0 +1,1 @@
+/bin/c++ -fPIC -shared -Wl,-soname,libbls_c256.so -o lib/libbls_c256.so CMakeFiles/bls_c256.dir/src/bls_c256.cpp.o  -lmcl -lgmp 

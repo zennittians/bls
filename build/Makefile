@@ -60,7 +60,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = /home/winay/go/src/github.com/zennittians/bls
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/winay/go/src/github.com/zennittians/bls
+CMAKE_BINARY_DIR = /home/winay/go/src/github.com/zennittians/bls/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -132,9 +132,9 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/winay/go/src/github.com/zennittians/bls/CMakeFiles /home/winay/go/src/github.com/zennittians/bls//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/winay/go/src/github.com/zennittians/bls/build/CMakeFiles /home/winay/go/src/github.com/zennittians/bls/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/winay/go/src/github.com/zennittians/bls/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/winay/go/src/github.com/zennittians/bls/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target

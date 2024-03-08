@@ -1,0 +1,1 @@
+/bin/g++ -fPIC -g -shared -Wl,-soname,libbls_c384.so -o lib/libbls_c384.so CMakeFiles/bls_c384.dir/src/bls_c384.cpp.o  -lmcl -lgmp 

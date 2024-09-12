@@ -15,6 +15,7 @@ SRC_SRC=bls_c256.cpp bls_c384.cpp bls_c384_256.cpp bls_c512.cpp
 TEST_SRC=bls256_test.cpp bls384_test.cpp bls384_256_test.cpp bls_c256_test.cpp bls_c384_test.cpp bls_c384_256_test.cpp bls_c512_test.cpp
 SAMPLE_SRC=bls256_smpl.cpp bls384_smpl.cpp
 
+BLS_SWAP_G?=1
 CFLAGS+=-I$(MCL_DIR)/include
 ifneq ($(MCL_MAX_BIT_SIZE),)
   CFLAGS+=-DMCL_MAX_BIT_SIZE=$(MCL_MAX_BIT_SIZE)
@@ -51,7 +52,7 @@ $(BLS512_LIB): $(OBJ_DIR)/bls_c512.o
 $(BLS384_256_LIB): $(OBJ_DIR)/bls_c384_256.o
 	$(AR) $@ $<
 
-ifneq ($(findstring $(OS),mac/mingw64),)
+ifneq ($(findstring $(OS),mac/mac-m1/mingw64),)
   COMMON_LIB=$(GMP_LIB) $(OPENSSL_LIB) -lstdc++
   BLS256_SLIB_LDFLAGS+=$(COMMON_LIB)
   BLS384_SLIB_LDFLAGS+=$(COMMON_LIB)
@@ -96,7 +97,7 @@ $(EXE_DIR)/%256_test.exe: $(OBJ_DIR)/%256_test.o $(BLS256_LIB) $(MCL_LIB)
 # sample exe links libbls256.a
 $(EXE_DIR)/%.exe: $(OBJ_DIR)/%.o $(BLS256_LIB) $(MCL_LIB)
 	$(PRE)$(CXX) $< -o $@ $(BLS256_LIB) -L$(MCL_DIR)/lib -lmcl $(LDFLAGS)
-ifeq ($(OS),mac)
+ifeq ($(findstring $(OS),mac/mac-m1),)
 	install_name_tool bin/bls_smpl.exe -change lib/libmcl.dylib $(MCL_DIR)/lib/libmcl.dylib
 endif
 
@@ -104,7 +105,7 @@ SAMPLE_EXE=$(addprefix $(EXE_DIR)/,$(SAMPLE_SRC:.cpp=.exe))
 sample: $(SAMPLE_EXE)
 
 TEST_EXE=$(addprefix $(EXE_DIR)/,$(TEST_SRC:.cpp=.exe))
-ifeq ($(OS),mac)
+ifneq ($(findstring $(OS),mac/mac-m1),)
   LIBPATH_KEY=DYLD_LIBRARY_PATH
 else
   LIBPATH_KEY=LD_LIBRARY_PATH
@@ -125,6 +126,7 @@ sample_test: $(EXE_DIR)/bls_smpl.exe
 # PATH is for mingw, LD_LIBRARY_PATH is for linux, DYLD_LIBRARY_PATH is for mac
 COMMON_LIB_PATH="../../../lib:../../../../mcl/lib"
 PATH_VAL=$$PATH:$(COMMON_LIB_PATH) LD_LIBRARY_PATH=$(COMMON_LIB_PATH) DYLD_LIBRARY_PATH=$(COMMON_LIB_PATH) CGO_LDFLAGS="-L../../../lib" CGO_CFLAGS="-I$(PWD)/include -I$(MCL_DIR)/include"
+$(info $$PATH_VAL is [${PATH_VAL}])
 test_go256: ffi/go/bls/bls.go ffi/go/bls/bls_test.go $(BLS256_SLIB)
 	cd ffi/go/bls && env PATH=$(PATH_VAL) go test -tags bn256 .
 test_go384: ffi/go/bls/bls.go ffi/go/bls/bls_test.go $(BLS384_SLIB)
